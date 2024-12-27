@@ -359,7 +359,7 @@ void handle_chatroom(SSL *ssl, int client_socket) {
     string online_users;
     for (const auto &client : client_info) {
       if (client.second.is_logged_in && client.first != client_socket) {
-        online_users += client.second.username + "\n";
+        online_users += "-- " + client.second.username + "\n";
       }
     }
     SSL_write(ssl, online_users.c_str(), BUFFER_SIZE);

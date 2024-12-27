@@ -50,7 +50,7 @@ void upload_file(SSL *ssl);
 void download_file(SSL *ssl);
 void sign_in(SSL *ssl);
 string log_in(SSL *ssl, string status);
-string log_out(SSL *ssl, string status);
+string log_out(SSL *ssl, string status, string command);
 void initiate_chat(SSL *ssl);
 char buffer[BUFFER_SIZE] = {0};
 string user;
@@ -138,9 +138,8 @@ int main() {
       status = log_in(ssl, status);
     } else if (command == "3") {
       check_invitation();
-      SSL_write(ssl, command.c_str(), command.size());
 
-      status = log_out(ssl, status);
+      status = log_out(ssl, status, command);
     } else if (command == "4") {
       // Exit
       check_invitation();
@@ -261,12 +260,14 @@ string log_in(SSL *ssl, string status) {
   user = username;
   return status;
 }
-string log_out(SSL *ssl, string status) {
+string log_out(SSL *ssl, string status, string command) {
   // Logout
   if (status == "[Not logged in]") {
     cout << colorText("You have to log in first\n", RED);
     return status;
   }
+  SSL_write(ssl, command.c_str(), command.size());
+
   memset(buffer, 0, BUFFER_SIZE);
   SSL_read(ssl, buffer, BUFFER_SIZE); // Receive logout response
 
@@ -284,7 +285,7 @@ void initiate_chat(SSL *ssl) {
     cout << colorText("Need log in\n", RED);
     return;
   }
-  cout << colorText("---| ", YELLOW) << colorText(buffer, GREEN);
+  cout << colorText(buffer, GREEN);
   // online user
 
   string peer;
@@ -329,7 +330,6 @@ void initiate_chat(SSL *ssl) {
       cout << "Chatrooom connection failed\n";
       return;
     }
-
     SSL *chatroom_ssl = SSL_new(tlsClientCtx);
     SSL_set_fd(chatroom_ssl, chatsock);
     if (SSL_connect(chatroom_ssl) <= 0) {
@@ -526,7 +526,6 @@ string select_file() {
       "zenity --file-selection --title=\"Select a file to upload\" 2>/dev/null";
   char buffer[512];
   string filePath;
-  cout << "select\n";
   FILE *pipe = popen(zenityCommand, "r");
   if (!pipe) {
     cerr << "Failed to open Zenity file selection dialog.\n";
@@ -547,7 +546,6 @@ void upload_file(SSL *ssl) {
     cout << colorText("Need log in\n", RED);
     return;
   }
-  cout << "log check\n";
   string filePath = select_file();
   if (filePath.empty()) {
     cout << "No file selected.\n";

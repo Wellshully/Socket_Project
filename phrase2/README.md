@@ -1,5 +1,7 @@
 # Socket Programming Project - Pharse2
 
+- **Ip address:** Note that the client assumes the server is listening on the 127.0.0.1(localhost) for a easier testing. For the real-world usage, I may change it to asking for a certain Ip.
+
 ## Multithread server
 
 - **Idea:** This functionality is actually implemented in pharse1, and I'm using a thread pool to serve each client connection. In the server code, the function `worker_thread()` keep popping the client socket fds from the queue and serve them. After finish a command, the worker thread would check the client is still connected(not exit), and pop the client socket fd back to the queue.
@@ -40,6 +42,7 @@
 ## Future Work
 
 - **Video streaming**: I spent a bunch of time to get this feature work. I tried to send the video frame by frame and play them by the `ffmpeg` library. However, I never figure out how decode the format of the video(and also the usage of the library), and thus I end up failing to play a video with my code.
+- **Blocked Invitation:** Since the client is always waiting for user to enter a command, the `check_invitation()` function cannot activated once the listening thread receives the invitation. Though it's not implement here, I think a better way is to interrupt(signal) the current input and enter the `check_invitaion()` immediately
 - **GUI interface**: After I finish all the functionalities above, I find that it's too hard for me to migrate them to a gui version. I tried to do it with `qt` or just use the browser as the front-end, but I'm so unfamiliar with them to get them work. However, I still tried to make the terminal interface as cool as possible, as you can see my chatroom layout is beautiful (and my desktop environment) **:)**
 
 ## Server.cpp
