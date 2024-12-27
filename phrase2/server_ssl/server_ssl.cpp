@@ -14,12 +14,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <unordered_map>
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libavutil/imgutils.h>
-#include <libswscale/swscale.h>
-}
+
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 10

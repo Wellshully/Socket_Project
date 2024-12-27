@@ -1,7 +1,5 @@
-#include <SDL2/SDL.h>
 #include <arpa/inet.h>
 #include <cstddef>
-#include <cstdint>
 #include <cstring>
 #include <deque>
 #include <fstream>
@@ -15,13 +13,7 @@
 #include <sys/socket.h>
 #include <thread>
 #include <unistd.h>
-#include <vector>
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libavutil/imgutils.h>
-#include <libswscale/swscale.h>
-}
+
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
