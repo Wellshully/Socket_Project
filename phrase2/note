@@ -1,7 +1,0 @@
-兩個client c1 c2
-c1 根server說要c2 chatroom server 就給c1 c2的ip port
-1. c1 connect, send 一個invite socket
-2. c2 的listening thread會accept c1 connect之後改變mutex
-3. c2下一次的loop有發現mutex被改就要問user是否接受invite
-4. c2接受的話先send給c1, 接著進入chatroom
-5. c1收到接受或不接受,接受的話也進入chatroom
